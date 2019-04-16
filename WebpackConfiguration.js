@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 class WebpackConfiguration {
 	constructor(fileName, jsEntry, jsOutputDir, cssOutputDir) {
@@ -22,15 +23,25 @@ class WebpackConfiguration {
 				filename: this.fileName + ".min.js"
 			},
 			module: {
-				rules: [{
-					test: /\.less$/,
-					use: [
-						// fallback to style-loader in development
-						MiniCssExtractPlugin.loader,
-						"css-loader",
-						"less-loader"
-					]
-				}]
+				rules: [
+					{
+						test: /\.js$/,
+						exclude: /node_modules/,
+						loader: "eslint-loader",
+						options: {
+							// eslint options (if necessary)
+						}
+					},
+					{
+						test: /\.less$/,
+						use: [
+							// fallback to style-loader in development
+							MiniCssExtractPlugin.loader,
+							"css-loader",
+							"less-loader"
+						]
+					}
+				]
 			},
 			plugins: [
 				new MiniCssExtractPlugin({
@@ -38,6 +49,11 @@ class WebpackConfiguration {
 					// both options are optional
 					filename: this.cssOutputDir + this.fileName + '.min.css',
 					chunkFilename: "[id].css"
+				}),
+				new StyleLintPlugin({
+					configFile: ".stylelintrc",
+					files: "./**/*.less",
+					extends: "stylelint-config-standard"
 				}),
 			]
 		}

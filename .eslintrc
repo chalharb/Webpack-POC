@@ -1,0 +1,15 @@
+{
+  "extends": "google",
+  "rules": {
+    "no-tabs": "off",
+    "indent": "off",
+    "eol-last": "off",
+    "quotes": "off",
+    "max-len": "off",
+    "no-var": "off",
+    "linebreak-style": "off",
+  },
+  "env": {
+    "jquery": true
+  }
+}
